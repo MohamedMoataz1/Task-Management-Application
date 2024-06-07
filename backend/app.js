@@ -2,13 +2,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+
+app.use(bodyParser.json()); // for JSON data
+app.use(bodyParser.urlencoded({ extended: true })); // for URL-encoded data
+
 const mongoose = require('mongoose');
 //connect to db
-    const dbURI = 'mongodb+srv://mohamedmoataz:test1234@cluster0.p4cn3ff.mongodb.net/task-management?retryWrites=true&w=majority&appName=Cluster0';
-    mongoose.connect(dbURI)
-        .then((res) => console.log("connected to db"))
-        .catch((err) => console.log("error happened : " + err))
-    app.use(bodyParser.urlencoded({ extended: true })); // for URL-encoded data
+const dbURI = 'mongodb+srv://mohamedmoataz:test1234@cluster0.p4cn3ff.mongodb.net/task-management?retryWrites=true&w=majority&appName=Cluster0';
+mongoose.connect(dbURI)
+    .then((res) => console.log("connected to db"))
+    .catch((err) => console.log("error happened : " + err))
+app.use(bodyParser.urlencoded({ extended: true })); // for URL-encoded data
 
 
 app.use((req, res, next) => {
@@ -19,6 +23,11 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
 
     next();
-})
+});
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'] 
+}));
+
 app.use('/task', require("./routes/task"));
 app.listen('7000', () => console.log("running on port 7000"));
