@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for URL-encoded data
 
 const mongoose = require('mongoose');
 //connect to db
-const dbURI = 'mongodb+srv://mohamedmoataz:test1234@cluster0.p4cn3ff.mongodb.net/task-management?retryWrites=true&w=majority&appName=Cluster0';
+const dbURI = process.env.DB_URI;
 mongoose.connect(dbURI)
     .then((res) => console.log("connected to db"))
     .catch((err) => console.log("error happened : " + err))
